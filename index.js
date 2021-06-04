@@ -1,15 +1,27 @@
-// Импорт файлового модуля (file modules) через CommonJS
-// const { getCurrentDate } = require("./file-module");
+// Поднятие веб-сервера через встроенный модуль http
+const http = require("http");
+const fs = require("fs").promises; // Импорт модуля для примера чтения файла при запросе
 
-// console.log(getCurrentDate());
+// Переменная для порта
+const PORT = 8081;
 
-// Импорт NPM модуля + CLI приложение с аргументами через консоль
-var Calc = require("calc-js").Calc;
+// Обработчик запросов с условием по урл /home
+const requestHandler = async (request, response) => {
+  // Читаем файл, чтобы отдать при запросе
+  const manifest = await fs.readFile("./package.json", "utf8");
 
-console.log(process.argv); // все параметры командной строки при запуске приложения (путь к ноде, пусть к файлу, параметры)
+  response.writeHead(200, { "Content-type": "text/json" }); // на любой запрос отвечаем 200 статусом и типом
+  return response.end(manifest); // завершаем запрос + отдаем контент
+};
 
-const [, , a, b] = process.argv; // деструктуризация параметров из командной строки
+// Создание инстанса сервера с обработчиком внутри
+const server = http.createServer(requestHandler);
 
-console.log(new Calc(parseFloat(a)).sum(parseFloat(b)).finish()); // Вывод результата в консоль
-// parseInt - парсит из строки, для целых чисел (Integer)
-// parseFloat - парсит из строки, для чисел с плавающей запятой (Float)
+// Слушатель порта
+server.listen(PORT, (error) => {
+  if (error) {
+    console.error("Error at server launch:", error);
+  }
+
+  console.log(`Server works at ${PORT}`);
+});
