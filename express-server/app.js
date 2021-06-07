@@ -6,7 +6,7 @@ const logger = require('morgan'); // Прослойка (миддлвар)
 
 // Подключение роутов
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const weatherRouter = require('./routes/weather');
 
 // Записываем в переменную вызов фреймворка
 const app = express();
@@ -41,15 +41,15 @@ app.use(cookieParser()); // Подключение куки парсера
 app.use(express.static(path.join(__dirname, 'public'))); // Подключение публичной директории public
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/weather', weatherRouter);
 
 // Формирование ошибки 404
 app.use((req, res, next) => {
   next(createError(404, `По маршруту ${req.url} ничего не найдено`));
 });
 
-// Обработчик ошибок (важен порядок параметров!)
-app.use(function (err, req, res, next) {
+// Обработчик ошибок (важен порядок и количество параметров!)
+app.use((err, req, res, next) => {
   // сохранение ошибок в переменную и вывод в зависимости от окружения (прод или дев режим)
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
