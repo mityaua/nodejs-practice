@@ -20,4 +20,4 @@ extends: ['standard', 'plugin:json/recommended', 'prettier'],
 
 #### Прекомит хуки (husky)
 
-> npm i lint-staged husky -D
+> npm i lint-staged husky@4.3.0 -D

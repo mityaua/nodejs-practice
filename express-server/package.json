@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint **/*.{js,json}",
+    "lint:fix": "eslint --fix **/*.{js,json}",
     "start": "cross-env NODE_ENV=production node ./bin/www",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/www",
     "start:dev:debug": "cross-env NODE_ENV=development DEBUG=* nodemon ./bin/www",
@@ -29,7 +30,7 @@
     "eslint-plugin-json": "^3.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "husky": "^6.0.0",
+    "husky": "^4.3.0",
     "lint-staged": "^11.0.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.1"
@@ -38,13 +39,5 @@
     "ignore": [
       "data/*.*"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,json}": "npm run lint"
   }
 }
