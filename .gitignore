@@ -1,5 +1,5 @@
 node_modules/
-express-server/node_modules/
+.env
 .expo/
 npm-debug.*
 *.jks
