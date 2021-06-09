@@ -3,9 +3,10 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 
+// Пакет для работы с cors (кросс-доменными запросами)
+const cors = require('cors');
 // Пакет для автоматического считывания переменных из .env
 require('dotenv').config();
-
 // Пакет для работы с запросами
 const got = require('got');
 
@@ -25,21 +26,40 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 // Внешний мидлвар для логирования
 app.use(morgan('tiny'));
+// Подключение мидлвара CORS
+app.use(cors());
 // Подключение маршрутов + наследование
 // app.use("/api", router);
 
 // Определяем маршруты (роутинг)
 app.get('/api/weather', async (req, res) => {
   try {
-    // req.query
-    // req.params
-    // req.body
-    // req.headers
+    // req.query - query параметры в url
+    // req.params - параметр динамеческого url
+    // req.body - данные с запроса (post, patch и т.д), с форм
+    // req.headers - метаданные
+
+    const { lat, lon } = req.query;
+
+    // Примитивная валидация query параметра lat
+    if (!lat) {
+      return res
+        .status(400)
+        .json({ message: 'latitude parameter is required' });
+    }
+
+    // Примитивная валидация query параметра lon
+    if (!lon) {
+      return res
+        .status(400)
+        .json({ message: 'longitude parameter is required' });
+    }
+
     const response = await got(BASE_URL, {
       searchParams: {
-        key: 'ea41bc3d393b41638cdd827b88acf3ef',
-        lat: '50.4670243',
-        lon: '30.3507212',
+        key: API_KEY,
+        lat,
+        lon,
       },
       responseType: 'json',
     });
