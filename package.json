@@ -19,8 +19,12 @@
   },
   "homepage": "https://github.com/mityaua/nodejs-practice#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "morgan": "^1.10.0",
+    "got": "^11.8.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.7"
   }
 }

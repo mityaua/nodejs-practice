@@ -3,8 +3,19 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
-// Переменная для хранения порта
-const PORT = 8081;
+// Пакет для автоматического считывания переменных из .env
+require("dotenv").config();
+
+// Пакет для работы с запросами
+const got = require("got");
+
+// Импорт маршрута из отдельного файла
+const { router } = require("./booksRouter");
+
+// Переменная для хранения порта, ключа, урла
+const PORT = process.env.PORT || 8081;
+const API_KEY = process.env.API_KEY;
+const BASE_URL = "http://api.weatherbit.io/v2.0/current";
 
 // Встроенный мидлвар для автоматической обработки JSON при отправке клиентом
 app.use(express.json());
@@ -14,27 +25,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 // Внешний мидлвар для логирования
 app.use(morgan("tiny"));
-
-// Пример кастомного мидлвара - логгера (важен порядок!)
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url} ${new Date().toISOString()}`);
-  next(); // передаем обработку дальше
-});
+// Подключение маршрутов + наследование
+// app.use("/api", router);
 
 // Определяем маршруты (роутинг)
-app.get("/home", (req, res) => {
-  res.send("get request");
-});
+app.get("/api/weather", async (req, res) => {
+  try {
+    const response = await got(BASE_URL, {
+      searchParams: {
+        key: "ea41bc3d393b41638cdd827b88acf3ef",
+        lat: "50.4670243",
+        lon: "30.3507212",
+      },
+      responseType: "json",
+    });
 
-// Пример пост запроса
-app.post("/home", (req, res) => {
-  console.log(req.body);
-  res.json({ x: 1, body: req.body });
-});
-
-// Пример ответа на все запросы, которые не заматчились (важен порядок)
-app.use((req, res) => {
-  res.json({ obj: "example" });
+    res.json({ response: response.body });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 // Вешаем слушателя на порт
