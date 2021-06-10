@@ -1,9 +1,16 @@
 // Сервис для кошек (логика)
 
+const { CatsRepository } = require('../repository');
+
 class CatsService {
-  constructor() {}
+  constructor() {
+    this.repository = {
+      cats: new CatsRepository(),
+    };
+  }
 
   getAll() {
+    const data = this.repository.cats.getAll();
     return {};
   }
 
