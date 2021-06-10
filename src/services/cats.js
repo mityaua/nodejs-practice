@@ -11,23 +11,27 @@ class CatsService {
 
   getAll() {
     const data = this.repository.cats.getAll();
-    return {};
+    return data;
   }
 
   getById({ id }) {
-    return {};
+    const data = this.repository.cats.getById(id);
+    return data;
   }
 
   create(body) {
-    return {};
+    const data = this.repository.cats.create(body);
+    return data;
   }
 
   update({ id }, body) {
-    return {};
+    const data = this.repository.cats.update(id, body);
+    return data;
   }
 
   remove({ id }) {
-    return;
+    const data = this.repository.cats.remove(id);
+    return data;
   }
 }
 

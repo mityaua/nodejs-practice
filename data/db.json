@@ -1,3 +1,10 @@
 {
-  "cats": []
+  "cats": [
+    {
+      "id": "4637c14d-f6d0-419b-a423-f9f385dc1220",
+      "name": "Keks",
+      "age": 3,
+      "isVaccinated": false
+    }
+  ]
 }
