@@ -32,8 +32,9 @@ class CatsRepository {
 
   // Обновление данных о коте в БД + возврат назад
   update(id, body) {
-    const record = db.get('cats').find({ id }).assign(body).value().write();
-    return record;
+    const record = db.get('cats').find({ id }).assign(body).value();
+    db.write();
+    return record.id ? record : null;
   }
 
   // Удаление кота в БД
