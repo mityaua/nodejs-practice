@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node server.js"
+    "start": "node server",
+    "start:dev": "npx nodemon server",
+    "lint": "npx eslint src",
+    "lint:fix": "npx eslint src --fix"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,9 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "eslint": "^7.28.0",
+    "eslint-config-google": "^0.14.0",
+    "nodemon": "^2.0.7",
+    "npx": "^10.2.2"
   }
 }

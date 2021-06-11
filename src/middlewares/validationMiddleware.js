@@ -14,7 +14,7 @@ module.exports = {
 
     // Обрабатываем ошибку валидации
     if (validationResult.error) {
-      return res.status(400).json({ status: validationResult.error.details });
+      return res.status(400).json({status: validationResult.error.details});
     }
 
     next();
@@ -32,7 +32,7 @@ module.exports = {
 
     // Обрабатываем ошибку валидации
     if (validationResult.error) {
-      return res.status(400).json({ status: validationResult.error.details });
+      return res.status(400).json({status: validationResult.error.details});
     }
 
     next();
