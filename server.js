@@ -4,7 +4,7 @@ require('dotenv').config(); // Пакет для автоматического 
 
 const app = express(); // Инициализация приложения
 
-const { postsRouter } = require('./routers/postsRouter'); // Импорт роутов с постами
+const { postsRouter } = require('./src/routers/postsRouter'); // Импорт роутов с постами
 
 const PORT = process.env.PORT || 8081; // Переменная для хранения порта, ключа, урла
 
