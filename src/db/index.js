@@ -1,14 +1,18 @@
-// Файл для работы с упрощенной базой данных lowdb
+// Файл для подключения к базе данных
+const { MongoClient } = require('mongodb');
+require('dotenv').config();
+const uriDb = process.env.URI_DB;
 
-const low = require('lowdb');
-const path = require('path');
-const FileSync = require('lowdb/adapters/FileSync');
+const db = new MongoClient.connect(uriDb, {
+  useUnifiedTopology: true,
+  poolSize: 5,
+});
 
-const adapter = new FileSync(
-  path.join(__dirname, '..', '..', 'data', 'db.json'),
-);
-const db = low(adapter);
-
-db.defaults({ cats: [] }).write();
+process.on('SIGINT', async () => {
+  const client = await db;
+  client.close();
+  console.log('Connection for DB disconnected and app terminated');
+  process.exit();
+});
 
 module.exports = db;

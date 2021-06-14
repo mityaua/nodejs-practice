@@ -1,46 +1,81 @@
-// Файл для работы с базой данных (инкапсуляция)
-const { v4: uuid } = require('uuid'); // Импорт библиотеки для генерации уникальных ID
-
-const db = require('../db'); // Импорт файла для работы c базой
+const { ObjectID } = require('mongodb');
+const { HttpCode } = require('../helpers/constans');
+const { ErrorHandler } = require('../helpers/errorHandler');
 
 // Класс для работы с БД
 class CatsRepository {
+  constructor(client) {
+    this.collection = client.db().collection('cats');
+  }
+
+  // Приватный метод для получения id
+  #getMongoId(id) {
+    try {
+      return ObjectID(id);
+    } catch (e) {
+      throw new ErrorHandler(
+        HttpCode.BAD_REQUEST,
+        `Mongo _id: ${e.message}`,
+        'Bad Request',
+      );
+    }
+  }
+
   // Запрашиваем всех котов из базы
-  getAll() {
-    return db.get('cats').value();
+  async getAll() {
+    const results = await this.collection.find().toArray();
+    return results;
   }
 
   // Запрашивает кота по id из базы
-  getById(id) {
-    return db.get('cats').find({ id }).value();
+  async getById(id) {
+    try {
+      const objectId = this.#getMongoId(id);
+      const [result] = await this.collection.find({ _id: objectId }).toArray();
+      return result;
+    } catch (e) {
+      e.status = 400;
+      e.data = 'Bad request';
+      throw e;
+    }
   }
 
   // Создаем нового кота в БД
-  create(body) {
-    const id = uuid();
-
+  async create(body) {
     const record = {
-      id,
       ...body,
       ...(body.isVaccinated ? {} : { isVaccinated: false }),
     };
 
-    db.get('cats').push(record).write(); // Добавление в БД сущности
+    const {
+      ops: [result],
+    } = await this.collection.insertOne(record);
 
-    return record;
+    return result;
   }
 
   // Обновление данных о коте в БД + возврат назад
-  update(id, body) {
-    const record = db.get('cats').find({ id }).assign(body).value();
-    db.write();
-    return record.id ? record : null;
+  async update(id, body) {
+    const objectId = this.#getMongoId(id);
+
+    const { value: result } = await this.collection.findOneAndUpdate(
+      { _id: objectId },
+      { $set: body },
+      { returnOriginal: false },
+    );
+
+    return result;
   }
 
   // Удаление кота в БД
-  remove(id) {
-    const [record] = db.get('cats').remove({ id }).write();
-    return record;
+  async remove(id) {
+    const objectId = this.#getMongoId(id);
+
+    const { value: result } = await this.collection.findOneAndDelete({
+      _id: objectId,
+    });
+
+    return result;
   }
 }
 

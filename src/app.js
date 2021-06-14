@@ -33,10 +33,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Устанавливаем порт для приложения
-const PORT = process.env.PORT || 3000;
-
-// Слушатель сервера на указанном порту
-app.listen(PORT, () => {
-  console.log(`Server running. Use API on port ${PORT}`);
-});
+module.exports = app;

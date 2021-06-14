@@ -1,36 +1,40 @@
 // Сервис для кошек (логика)
-
 const { CatsRepository } = require('../repository');
+const db = require('../db'); // Импорт файла для работы c базой
 
 class CatsService {
   constructor() {
-    this.repository = {
-      cats: new CatsRepository(),
-    };
+    process.nextTick(async () => {
+      const client = await db;
+
+      this.repository = {
+        cats: new CatsRepository(client),
+      };
+    });
   }
 
-  getAll() {
-    const data = this.repository.cats.getAll();
+  async getAll() {
+    const data = await this.repository.cats.getAll();
     return data;
   }
 
-  getById({ id }) {
-    const data = this.repository.cats.getById(id);
+  async getById({ id }) {
+    const data = await this.repository.cats.getById(id);
     return data;
   }
 
-  create(body) {
-    const data = this.repository.cats.create(body);
+  async create(body) {
+    const data = await this.repository.cats.create(body);
     return data;
   }
 
-  update({ id }, body) {
-    const data = this.repository.cats.update(id, body);
+  async update({ id }, body) {
+    const data = await this.repository.cats.update(id, body);
     return data;
   }
 
-  remove({ id }) {
-    const data = this.repository.cats.remove(id);
+  async remove({ id }) {
+    const data = await this.repository.cats.remove(id);
     return data;
   }
 }

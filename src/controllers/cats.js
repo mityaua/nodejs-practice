@@ -7,9 +7,9 @@ const catsService = new CatsService(); // экземпляр от класса
 // Список методов (обработчиков маршрутов) - только формируют ответ
 
 // Метод для ответа на запрос по всем кошкам
-const getAll = (req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
-    const cats = catsService.getAll();
+    const cats = await catsService.getAll();
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
@@ -23,9 +23,9 @@ const getAll = (req, res, next) => {
 };
 
 // Метод для ответа на запрос по id кошки
-const getById = (req, res, next) => {
+const getById = async (req, res, next) => {
   try {
-    const cat = catsService.getById(req.params);
+    const cat = await catsService.getById(req.params);
 
     if (cat) {
       return res.status(HttpCode.OK).json({
@@ -48,9 +48,9 @@ const getById = (req, res, next) => {
 };
 
 // Метод для создания кошки
-const create = (req, res, next) => {
+const create = async (req, res, next) => {
   try {
-    const cat = catsService.create(req.body);
+    const cat = await catsService.create(req.body);
     res.status(HttpCode.CREATED).json({
       status: 'success',
       code: HttpCode.CREATED,
@@ -64,9 +64,9 @@ const create = (req, res, next) => {
 };
 
 // Метод для полного обновления данных о кошке
-const update = (req, res, next) => {
+const update = async (req, res, next) => {
   try {
-    const cat = catsService.update(req.params, req.body);
+    const cat = await catsService.update(req.params, req.body);
 
     if (cat) {
       return res.status(HttpCode.OK).json({
@@ -89,9 +89,9 @@ const update = (req, res, next) => {
 };
 
 // Метод для частичного обновления данных (статуса кошки)
-const updateStatus = (req, res, next) => {
+const updateStatus = async (req, res, next) => {
   try {
-    const cat = catsService.update(req.params, req.body);
+    const cat = await catsService.update(req.params, req.body);
 
     if (cat) {
       return res.status(HttpCode.OK).json({
@@ -114,9 +114,9 @@ const updateStatus = (req, res, next) => {
 };
 
 // Метод для удаления кошки
-const remove = (req, res, next) => {
+const remove = async (req, res, next) => {
   try {
-    const cat = catsService.remove(req.params);
+    const cat = await catsService.remove(req.params);
 
     if (cat) {
       return res.status(HttpCode.OK).json({
