@@ -3,10 +3,13 @@ const express = require('express');
 const router = new express.Router();
 
 // Импорт валидации из отдельной папки
-const {
-  addPostValidation,
-  patchPostValidation,
-} = require('../middlewares/validationMiddleware');
+const {addPostValidation} = require('../middlewares/validationMiddleware');
+
+// Импорт универсального трай кетча
+const {asyncWrapper} = require('../helpers/apiHelpers');
+
+// Импорт контроллеров
+const modelsMiddlewares = require('../middlewares/models');
 
 // Импорт контроллеров
 const {
@@ -14,15 +17,15 @@ const {
   getPostById,
   addPost,
   changePost,
-  patchPost,
   deletePost,
 } = require('../controllers/postsController');
 
-router.get('/', getPosts); // Роут для всех постов
-router.get('/:id', getPostById); // Роут для получения поста по id
-router.post('/', addPostValidation, addPost); // Роут для создания поста
-router.put('/:id', addPostValidation, changePost); // Роут для изменения поста
-router.patch('/:id', patchPostValidation, patchPost); // Для частичного измн.
-router.delete('/:id', deletePost); // Роут для удаления поста
+router.use(modelsMiddlewares);
+
+router.get('/', asyncWrapper(getPosts)); // Роут для всех постов
+router.get('/:id', asyncWrapper(getPostById)); // полученияе поста по id
+router.post('/', addPostValidation, asyncWrapper(addPost)); // создание поста
+router.put('/:id', addPostValidation, asyncWrapper(changePost)); // измен. поста
+router.delete('/:id', asyncWrapper(deletePost)); // удаление поста
 
 module.exports = {postsRouter: router};

@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
     "start:dev": "npx nodemon server",
-    "lint": "npx eslint src",
-    "lint:fix": "npx eslint src --fix"
+    "lint": "npx eslint src server.js",
+    "lint:fix": "npx eslint --fix src server.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "joi": "^17.4.0",
+    "mongodb": "^3.6.9",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
