@@ -1,18 +1,34 @@
 // Файл для подключения к базе данных
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 require('dotenv').config();
-const uriDb = process.env.URI_DB;
+const uriDb = process.env.MONGO_URL;
 
-const db = new MongoClient.connect(uriDb, {
+const db = mongoose.connect(uriDb, {
   useUnifiedTopology: true,
-  poolSize: 5,
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  useFindAndModify: false,
 });
 
+// Консолит подключение к базе
+mongoose.connection.on('connected', err => {
+  console.log('Mongoose connected');
+});
+
+// Обработка ошибки при коннекте
+mongoose.connection.on('error', err => {
+  console.log(`Mongoose connection error: ${err.messege}`);
+});
+
+// Консолит отключение от базы
+mongoose.connection.on('disconnected', err => {
+  console.log(`Mongoose connection error: ${err.messege}`);
+});
+
+// Отключение от базы при событии SIGINT (ctrl + C)
 process.on('SIGINT', async () => {
-  const client = await db;
-  client.close();
   console.log('Connection for DB disconnected and app terminated');
-  process.exit();
+  process.exit(1);
 });
 
 module.exports = db;

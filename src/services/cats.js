@@ -1,16 +1,11 @@
 // Сервис для кошек (логика)
 const { CatsRepository } = require('../repository');
-const db = require('../db'); // Импорт файла для работы c базой
 
 class CatsService {
   constructor() {
-    process.nextTick(async () => {
-      const client = await db;
-
-      this.repository = {
-        cats: new CatsRepository(client),
-      };
-    });
+    this.repository = {
+      cats: new CatsRepository(),
+    };
   }
 
   async getAll() {

@@ -6,6 +6,8 @@ const { HttpCode } = require('../helpers/constans'); // Импорт конст�
 const schemaCreateCat = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).required(),
   age: Joi.number().integer().min(1).max(40).required(),
+  features: Joi.array().optional(),
+  owner: Joi.object().optional(),
   isVaccinated: Joi.boolean().optional(),
 });
 
@@ -13,6 +15,8 @@ const schemaCreateCat = Joi.object({
 const schemaUpdateCat = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).optional(),
   age: Joi.number().integer().min(1).max(40).optional(),
+  features: Joi.array().optional(),
+  owner: Joi.object().optional(),
   isVaccinated: Joi.boolean().optional(),
 });
 
